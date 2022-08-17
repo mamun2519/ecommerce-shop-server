@@ -13,8 +13,10 @@ app.use(cors())
 // router hendeler 
 const product = require('./router/productRouter.js')
 const user = require('./router/userRouter')
+const order = require('./router/orderRoute')
 app.use('/product' , product)
 app.use("/user" , user)
+app.use("/order" , order)
 
 
 app.use('/' , (req , res)=>{
