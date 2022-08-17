@@ -8,7 +8,7 @@ mongoose.connect(uri , { useNewUrlParser: true, useUnifiedTopology: true })
       console.log("mongoose was cannect");
 })
 .catch((error) =>{
-      console.log(error)
+      console.log("this is error",error)
 })
 }
 module.exports = database

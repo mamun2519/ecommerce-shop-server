@@ -19,7 +19,6 @@ exports.newOrder = async (req , res , next) =>{
             shippingPrice,
             totalPrice,
             paidAt: Date.now(),
-            //   user: req.user._id,
             user: req.params.id
           })
 
@@ -28,5 +27,15 @@ exports.newOrder = async (req , res , next) =>{
             order
 
           })
+}
 
+exports.getAllOrders = async (req , res , next) =>{
+  const orders = await Order.find()
+  console.log(orders);
+
+  res.status(200).json({
+    success: true,
+    orders
+
+  })
 }
