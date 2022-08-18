@@ -1,5 +1,5 @@
 const Order = require('../modal/orderModal')
-
+const Product = require("../modal/productModal")
 exports.newOrder = async (req , res , next) =>{
       const {
             shippingInfo,
@@ -71,5 +71,46 @@ exports.orderDelete = async (req , res , next) =>{
 }
 
 exports.orderUpdate = async (req , res, next) =>{
-  
-}
+  const order = await Order.findById(req.params.id)
+  if(!order){
+    res.status(404).json({
+      success: false,
+      "message": "Order Not found!"
+    });}
+
+    if(order.orderStatus === "Delivered"){
+      res.status(400).json({
+        success: false,
+        message: "You Have All Ready Delivered This Order."
+      });}
+
+      if(req.body.status === "Shipped"){
+        order.orderItems.forEach(async (o) => {
+          await updateStock(o.product, o.quantity);
+        });
+        
+      }
+      order.orderStatus = req.body.status;
+
+      if(req.body.status === "Delivered"){
+        order.deliveredAt = Date.now()
+
+      }
+      await order.save({ validateBeforeSave: false })
+      res.status(200).json({
+        success: true,
+      });
+
+    }
+
+    async function updateStock(id, quantity) {
+      const product = await Product.findById(id);
+    
+      product.Stock -= quantity;
+    
+      await product.save({ validateBeforeSave: false });
+    }
+    
+
+
+
