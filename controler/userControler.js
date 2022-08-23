@@ -1,6 +1,6 @@
 const User = require("../modal/userModal");
 const sendToken = require("../utilits/sendJWToken");
-
+const cloudinary = require('cloudinary')
 exports.getAllUser = async (req, res, next) => {
   const user = await User.find({});
   res.status(200).json({
@@ -18,20 +18,30 @@ exports.getUserDetiles = async (req, res, next) => {
 };
 
 exports.createUser = async (req, res, next) => {
+  
+  
+  console.log(req.body);
   const { name, email, avatar } = req.body;
-  console.log(email);
+
   let user = await User.findOne({email});
-  console.log(user);
+
   if (user) {
     sendToken(user, 200, res);
   } 
   else {
+    // picture uplode with cloudinary
+  const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+    folder: "avatars",
+    width: 150,
+    crop: "scale",
+  });
+  console.log(myCloud);
     const addeduser = await User.create({
       name,
       email,
       avatar: {
-        public_id: "xxx",
-        url: "xxx",
+        public_id:  myCloud.public_id,
+        url: myCloud.secure_url,
       },
     });
     console.log(addeduser)
