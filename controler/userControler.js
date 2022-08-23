@@ -19,14 +19,13 @@ exports.getUserDetiles = async (req, res, next) => {
 
 exports.createUser = async (req, res, next) => {
   const { name, email, avatar } = req.body;
-  let user = await User.find({ email });
+  console.log(email);
+  let user = await User.findOne({email});
   console.log(user);
-  if (!user) {
-    res.status(403).json({
-      success: false,
-      message: "User All have an account",
-    });
-  } else {
+  if (user) {
+    sendToken(user, 200, res);
+  } 
+  else {
     const addeduser = await User.create({
       name,
       email,
@@ -35,6 +34,7 @@ exports.createUser = async (req, res, next) => {
         url: "xxx",
       },
     });
+    console.log(addeduser)
 
     sendToken(addeduser, 200, res);
   }

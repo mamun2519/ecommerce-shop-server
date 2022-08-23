@@ -11,7 +11,7 @@ exports.createProduct = async (req, res, next) => {
 };
 
 exports.getProduct = async (req, res, next) => {
-  const parPageDataShow = 5;
+  const parPageDataShow = 9;
 
   // search and filter funcanolity
   const searchAndPagination = new apiFetures(Product.find(), req.query)
