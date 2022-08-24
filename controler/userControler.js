@@ -20,7 +20,6 @@ exports.getUserDetiles = async (req, res, next) => {
 exports.createUser = async (req, res, next) => {
   
   
-  console.log(req.body);
   const { name, email, avatar } = req.body;
 
   let user = await User.findOne({email});
@@ -35,7 +34,7 @@ exports.createUser = async (req, res, next) => {
     width: 150,
     crop: "scale",
   });
-  console.log(myCloud);
+  // console.log(myCloud);
     const addeduser = await User.create({
       name,
       email,
@@ -44,7 +43,7 @@ exports.createUser = async (req, res, next) => {
         url: myCloud.secure_url,
       },
     });
-    console.log(addeduser)
+    // console.log(addeduser)
 
     sendToken(addeduser, 200, res);
   }
