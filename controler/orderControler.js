@@ -123,3 +123,31 @@ exports.myOrder = async (req, res, next) => {
     order,
   });
 };
+
+
+exports.discountPromoCode = async (req, res, next) =>{
+  const price = parseInt(req.query.totalCost)
+
+  const promoCode = parseInt(req.query.code)
+   
+  const screctCode = [4000 , 5000 , 6000] 
+  const codeMatch = screctCode.includes(promoCode)
+  if(codeMatch){
+    const discountPrice = price /100 * 20
+    const totalPrice = price - discountPrice
+    res.status(200).json({
+      success: true,
+      price,
+      totalPrice ,
+      discountPrice
+    });
+  }
+  else{
+    res.status(404).json({
+      success: false,
+      message: "Sorry We dont discount",
+    });
+
+  }
+
+}
