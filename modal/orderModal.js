@@ -21,11 +21,11 @@ const orderShema = new mongoose.Schema({
               required: true,
             },
             pinCode: {
-              type: Number,
+              type: Number || String,
               required: true,
             },
             phoneNo: {
-              type: Number,
+              type: Number || String,
               required: true,
             },
           },
@@ -61,7 +61,7 @@ const orderShema = new mongoose.Schema({
           },
           paymentInfo: {
             id: {
-              type: String,
+              type: String || Number,
               required: true,
             },
             status: {
@@ -73,12 +73,12 @@ const orderShema = new mongoose.Schema({
             type: Date,
             required: true,
           },
-          itemsPrice: {
+          subTotalPrice: {
             type: Number,
             required: true,
             default: 0,
           },
-          taxPrice: {
+          discount: {
             type: Number,
             required: true,
             default: 0,

@@ -1,23 +1,27 @@
 const Order = require("../modal/orderModal");
 const Product = require("../modal/productModal");
+const stripe = require("stripe")(
+  "sk_test_51L1nmNCGpaTt0RU81oq26j6Ta7gwb9pGlOOwxjeXAQgefsXMvmRxFUopKE2St6GDbDpxjUug0KxRyqzL6oKarPcR00lqLjh70r"
+);
 exports.newOrder = async (req, res, next) => {
   const {
     shippingInfo,
     orderItems,
     paymentInfo,
-    itemsPrice,
-    taxPrice,
+    subTotalPrice,
+    discount,
     shippingPrice,
     totalPrice,
   } = req.body;
+  console.log(req.body);
   const order = await Order.create({
     shippingInfo,
     orderItems,
     paymentInfo,
-    itemsPrice,
-    taxPrice,
+    subTotalPrice,
     shippingPrice,
     totalPrice,
+    discount,
     paidAt: Date.now(),
     user: req.params.id,
   });
@@ -124,27 +128,42 @@ exports.myOrder = async (req, res, next) => {
   });
 };
 
-
-exports.discountPromoCode = async (req, res, next) =>{
-  const price = parseInt(req.query.totalCost)
-  const promoCode = parseInt(req.query.code)
-  const screctCode = [4000 , 5000 , 6000] 
-  const codeMatch = screctCode.includes(promoCode)
-  if(codeMatch){
-    const discountPrice = parseInt(price /100 * 20)
-    const totalPrice = price - discountPrice
+exports.discountPromoCode = async (req, res, next) => {
+  const price = parseInt(req.query.totalCost);
+  const promoCode = parseInt(req.query.code);
+  const screctCode = [4000, 5000, 6000];
+  const codeMatch = screctCode.includes(promoCode);
+  if (codeMatch) {
+    const discountPrice = parseInt((price / 100) * 20);
+    const totalPrice = price - discountPrice;
     res.status(200).json({
       success: true,
       discountPrice,
-      totalPrice
-    })
-  }
-  else{
+      totalPrice,
+    });
+  } else {
     res.status(404).json({
       success: false,
       message: "Sorry We dont discount",
     });
-
   }
+};
 
-}
+exports.paymentGetWay = async (req, res, next) => {
+  const service = req.body;
+  const price = service.price;
+  const amount = price * 100;
+
+  // Create a PaymentIntent with the order amount and currency
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: amount,
+    currency: "usd",
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  });
+
+  res.send({
+    clientSecrets: paymentIntent.client_secret,
+  });
+};
