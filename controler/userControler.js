@@ -34,13 +34,22 @@ exports.createUser = async (req, res, next) => {
     width: 150,
     crop: "scale",
   });
-  // console.log(myCloud);
+  const cover = await cloudinary.v2.uploader.upload(req.body.cover, {
+    folder: "cover",
+    width: 150,
+    crop: "scale",
+  });
+//  cover picture uplode 
     const addeduser = await User.create({
       name,
       email,
       avatar: {
         public_id:  myCloud.public_id,
         url: myCloud.secure_url,
+      },
+      cover: {
+        public_id:  cover.public_id,
+        url: cover.secure_url,
       },
     });
     // console.log(addeduser)

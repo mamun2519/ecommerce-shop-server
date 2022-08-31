@@ -4,6 +4,9 @@ const stripe = require("stripe")(
   "sk_test_51L1nmNCGpaTt0RU81oq26j6Ta7gwb9pGlOOwxjeXAQgefsXMvmRxFUopKE2St6GDbDpxjUug0KxRyqzL6oKarPcR00lqLjh70r"
 );
 exports.newOrder = async (req, res, next) => {
+  const d = new Date(); 
+		const jastDate = (d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear(); 
+		
   const {
     shippingInfo,
     orderItems,
@@ -22,7 +25,7 @@ exports.newOrder = async (req, res, next) => {
     shippingPrice,
     totalPrice,
     discount,
-    paidAt: Date.now(),
+    paidAt: jastDate ,
     user: req.params.id,
   });
 

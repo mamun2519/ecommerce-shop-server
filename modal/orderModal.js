@@ -43,6 +43,10 @@ const orderShema = new mongoose.Schema({
                 type: Number,
                 required: true,
               },
+              totalPrice: {
+                type: Number,
+                required: true,
+              },
               image: {
                 type: String,
                 required: true,
@@ -70,7 +74,7 @@ const orderShema = new mongoose.Schema({
             },
           },
           paidAt: {
-            type: Date,
+            type: String,
             required: true,
           },
           subTotalPrice: {

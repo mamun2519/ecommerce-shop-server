@@ -30,6 +30,41 @@ const userShema = new mongoose.Schema({
             type: Date,
             default: Date.now,
           },
+          username:{
+            type: String,
+            default: 'No Text'
+          },
+          jobtitle:{
+            type: String,
+            default: 'No Text'
+          },
+          bio:{
+            type: String,
+            default: 'No Text'
+          },
+          email:{
+            type: String,
+            default: 'No Text'
+          },
+          profession:{
+            type: String,
+            default: 'No Text'
+          },
+          birthday:{
+            type: String,
+            default: 'No Text'
+          },
+          cover:{
+            public_id: {
+              type: String,
+              default: 'No Text'
+            },
+            url: {
+              type: String,
+              default: 'No Text'
+            },
+          },
+          
 })
 
 userShema.methods.getJWTtoken = function (){
