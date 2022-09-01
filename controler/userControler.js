@@ -59,39 +59,72 @@ exports.createUser = async (req, res, next) => {
 };
 
 exports.updateUserProfile = async (req, res, next) => {
-  const id = req.params.id;
-  const updateUser = {
-    name: req.body.name,
-  };
+ 
+  try{
+    const id = req.params.id;
+    const updateUser = {
+      username: req.body.username,
+      jobtitle: req.body.jobtitle,
+      bio: req.body.bio,
+      profession: req.body.profession,
+      alternativEmail: req.body.alternativEmail,
+      univercity: req.body.univercity,
+      birthday: req.body.birthday,
+    };
+   
+    if (req.body.avatar !== "") {
+      const user = await User.findById(id);
+      const imageId = user.avatar.public_id;
+  
+           await cloudinary.v2.uploader.destroy(imageId);
+  
+          const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+            folder: "avatars",
+            width: 150,
+            crop: "scale",
+          });
+  
+          updateUser.avatar = {
+            public_id: myCloud.public_id ,
+            url: myCloud.secure_url
+          };
+    }
+    if (req.body.cover !== "") {
+      const user = await User.findById(id);
+      const coverId = user.avatar.public_id;
+  
+           await cloudinary.v2.uploader.destroy(coverId);
+  
+          const myCloud = await cloudinary.v2.uploader.upload(req.body.cover, {
+            folder: "avatars",
+            width: 150,
+            crop: "scale",
+          });
+  
+          updateUser.cover = {
+            public_id: myCloud.public_id ,
+            url: myCloud.secure_url
+          };
+    }
+  
+    const updated = await User.findByIdAndUpdate(id, updateUser, {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    });
+  
+    res.status(200).json({
+      success: true,
+      user: updated,
+    });
 
-  if (req.body.avatar !== "") {
-    const user = await User.findById(id);
-    const imageId = user.avatar.public_id;
-
-    //      await cloudinary.v2.uploader.destroy(imageId);
-
-    //     const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-    //       folder: "avatars",
-    //       width: 150,
-    //       crop: "scale",
-    //     });
-
-    //     updateUser.avatar = {
-    //       public_id: myCloud.public_id ,
-    //       url: myCloud.secure_url
-    //     };
   }
+  catch(e){
+    console.log(e);
 
-  const updated = await User.findByIdAndUpdate(id, updateUser, {
-    new: true,
-    runValidators: true,
-    useFindAndModify: false,
-  });
-
-  res.status(200).json({
-    success: true,
-    user: updated,
-  });
+  }
+ 
+ 
 };
 
 exports.deleteUser = async (req, res, next) => {

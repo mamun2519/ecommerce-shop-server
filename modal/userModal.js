@@ -42,7 +42,11 @@ const userShema = new mongoose.Schema({
             type: String,
             default: 'No Text'
           },
-          email:{
+          univercity:{
+            type: String,
+            default: 'No Text'
+          },
+          alternativEmail:{
             type: String,
             default: 'No Text'
           },
