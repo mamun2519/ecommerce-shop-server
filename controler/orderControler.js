@@ -1,5 +1,6 @@
 const Order = require("../modal/orderModal");
 const Product = require("../modal/productModal");
+const apiFetures = require("../utilits/apiFetures.js");
 const stripe = require("stripe")(
   "sk_test_51L1nmNCGpaTt0RU81oq26j6Ta7gwb9pGlOOwxjeXAQgefsXMvmRxFUopKE2St6GDbDpxjUug0KxRyqzL6oKarPcR00lqLjh70r"
 );
@@ -36,7 +37,13 @@ exports.newOrder = async (req, res, next) => {
 };
 
 exports.getAllOrders = async (req, res, next) => {
-  const orders = await Order.find().populate("user", "name email");
+  const parPageDataShow = 9;
+
+  const order = new apiFetures(Order.find().populate("user", "name email"), req.query)
+  .search()
+  .filter()
+  .pagination(parPageDataShow);
+  const orders = await order.query;
   res.status(200).json({
     success: true,
     orders,
