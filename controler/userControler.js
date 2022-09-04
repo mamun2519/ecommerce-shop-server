@@ -1,13 +1,35 @@
 const User = require("../modal/userModal");
 const sendToken = require("../utilits/sendJWToken");
 const cloudinary = require('cloudinary')
+const userFetureApi = require("../utilits/userFetureApi");
+const AdminFetureApi = require("../utilits/adminFetureApi");
 exports.getAllUser = async (req, res, next) => {
-  const user = await User.find({});
+  const parPageDataShow = 9;
+  const searchAndPagination = new userFetureApi(User.find(), req.query)
+  .search()
+  .filter()
+  .pagination(parPageDataShow);
+
+  const user = await await searchAndPagination.query;
   res.status(200).json({
     success: true,
     user,
   });
 };
+
+exports.getAllAdmin = async (req , res , next)=>{
+  const parPageDataShow = 9;
+  const searchAndPagination = new  AdminFetureApi(User.find(), req.query)
+  .search()
+  .filter().pagination(parPageDataShow);
+
+  const user =  await searchAndPagination.query;
+  res.status(200).json({
+    success: true,
+    user,
+  });
+
+}
 
 exports.getUserDetiles = async (req, res, next) => {
   const user = await User.findById(req.params.id);
@@ -144,14 +166,11 @@ exports.deleteUser = async (req, res, next) => {
 
 exports.createAdmin = async (req, res, next) => {
   const email = req.params.email;
-
   const adminRequester = req.decoded.email;
-
   const requestAdmin = await User.findOne({ email: adminRequester });
   if (requestAdmin.role == "admin") {
     const roleAction = req.query.roleAction;
     if (roleAction == "admin") {
-      console.log();
       const makeAdmin = await User.updateOne(
         { email },
         {
