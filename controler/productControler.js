@@ -1,9 +1,18 @@
 const Product = require("../modal/productModal.js");
 const apiFetures = require("../utilits/apiFetures.js");
-
+const cloudinary = require('cloudinary')
 exports.createProduct = async (req, res, next) => {
-  const products = req.body;
-  const sendProudcts = await Product.create(products);
+  const myCloud = await cloudinary.v2.uploader.upload(req.body.images, {
+    folder: "products",
+    width: 150,
+    crop: "scale",
+  });
+
+  const {name ,  description , price , category , Stock , brand , user}= req.body;
+  const sendProudcts = await Product.create({name ,  description , price , category , Stock , brand , user , images: {
+    public_id:  myCloud.public_id,
+    url: myCloud.secure_url,
+  },});
   res.status(200).json({
     message: "Product Added SuccessFull",
     product: sendProudcts,

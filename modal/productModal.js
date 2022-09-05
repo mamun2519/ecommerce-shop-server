@@ -45,6 +45,10 @@ const productShema = new mongoose.Schema({
             type: Number,
             default: 0,
           },
+          brand: {
+            type: String,
+            required: true,
+          },
           reviews: [
             {
               user: {
@@ -67,11 +71,11 @@ const productShema = new mongoose.Schema({
             },
           ],
           // product ta je uplode korse ta callet korar jonno
-      //     user: {
-      //       type: mongoose.Schema.ObjectId,
-      //       ref: "User",
-      //       required: true,
-      //     },
+          user: {
+            type: mongoose.Schema.ObjectId,
+            ref: "User",
+            required: true,
+          },
           createdAt: {
             type: Date,
             default: Date.now,
