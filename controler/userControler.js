@@ -40,44 +40,52 @@ exports.getUserDetiles = async (req, res, next) => {
 };
 
 exports.createUser = async (req, res, next) => {
-  
-  
-  const { name, email, avatar } = req.body;
 
-  let user = await User.findOne({email});
+  try{
+    const { name, email, avatar } = req.body;
 
-  if (user) {
-    sendToken(user, 200, res);
-  } 
-  else {
-    // picture uplode with cloudinary
-  const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-    folder: "avatars",
-    width: 150,
-    crop: "scale",
-  });
-  const cover = await cloudinary.v2.uploader.upload(req.body.cover, {
-    folder: "cover",
-    width: 150,
-    crop: "scale",
-  });
-//  cover picture uplode 
-    const addeduser = await User.create({
-      name,
-      email,
-      avatar: {
-        public_id:  myCloud.public_id,
-        url: myCloud.secure_url,
-      },
-      cover: {
-        public_id:  cover.public_id,
-        url: cover.secure_url,
-      },
+    let user = await User.findOne({email});
+  
+    if (user) {
+      sendToken(user, 200, res);
+    } 
+    else {
+      // picture uplode with cloudinary
+    const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: "avatars",
+      width: 150,
+      crop: "scale",
     });
-    // console.log(addeduser)
-
-    sendToken(addeduser, 200, res);
+    const cover = await cloudinary.v2.uploader.upload(req.body.cover, {
+      folder: "cover",
+      width: 150,
+      crop: "scale",
+    });
+  //  cover picture uplode 
+      const addeduser = await User.create({
+        name,
+        email,
+        avatar: {
+          public_id:  myCloud.public_id,
+          url: myCloud.secure_url,
+        },
+        cover: {
+          public_id:  cover.public_id,
+          url: cover.secure_url,
+        },
+      });
+      // console.log(addeduser)
+  
+      sendToken(addeduser, 200, res);
+    }
   }
+  catch(eror){
+    console.log(eror)
+
+  }
+  
+  
+ 
 };
 
 exports.updateUserProfile = async (req, res, next) => {
