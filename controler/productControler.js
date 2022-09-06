@@ -74,9 +74,43 @@ exports.deleteProduct = async (req, res, next) => {
 
 exports.getProductDetels = async (req, res, next) => {
   const id = req.params.id;
-  const product = await Product.findById(id);
+  const product = await Product.findById(id).populate("user", "name");
   res.json({
     success: true,
     product,
   });
 };
+
+
+exports.addProductReview = async (req , res , next) =>{
+  console.log(req.body);
+  try{
+    const { rating, comment, user  } = req.body;
+
+    const review = {
+      user: user,
+      rating: Number(rating),
+      comment,
+    };
+    const id = req.params.id;
+    let product = await Product.findById(id);
+    if (!product) {
+      res.status(500).json({
+        success: false,
+        message: "product Not fount",
+      });
+    }
+    product.reviews.push(review)
+    product.numOfReviews = product.reviews.length;
+    await product.save({ validateBeforeSave: false });
+  res.status(200).json({
+    success: true,
+    message: "Review Added successFull"
+  });
+
+  }
+  catch(error){
+    console.log(error)
+  }
+ 
+}
