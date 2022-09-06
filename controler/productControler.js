@@ -74,7 +74,7 @@ exports.deleteProduct = async (req, res, next) => {
 
 exports.getProductDetels = async (req, res, next) => {
   const id = req.params.id;
-  const product = await Product.findById(id).populate("user", "name");
+  const product = await Product.findById(id).populate("user", "name email")
   res.json({
     success: true,
     product,
