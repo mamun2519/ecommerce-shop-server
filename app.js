@@ -7,7 +7,8 @@ const fileUpload = require("express-fileupload");
 app.use(cookieParser())
 app.use(express.json())
 app.use(cors({
-      origin: "*",
+      origin: "https://fashion-ecommerce-92924.web.app",
+      methods: ["get" , "post"]
       
 }))
 app.use(fileUpload());
