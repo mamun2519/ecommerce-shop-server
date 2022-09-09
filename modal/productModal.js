@@ -64,6 +64,18 @@ const productShema = new mongoose.Schema({
                 type: String,
                 required: true,
               },
+              name: {
+                type: String,
+                required: true,
+              },
+              profileUrl: {
+                type: String,
+                required: true,
+              },
+              time: {
+                type: String,
+                required: true,
+              },
             },
           ],
           // product ta je uplode korse ta callet korar jonno

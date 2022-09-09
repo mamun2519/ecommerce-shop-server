@@ -85,13 +85,17 @@ exports.getProductDetels = async (req, res, next) => {
 exports.addProductReview = async (req , res , next) =>{
   console.log(req.body);
   try{
-    const { rating, comment, user  } = req.body;
+    const { rating, comment, user , profileUrl , time , name } = req.body;
 
     const review = {
       user: user,
       rating: Number(rating),
       comment,
+      profileUrl,
+      time,
+      name
     };
+    console.log(req.body);
     const id = req.params.id;
     let product = await Product.findById(id);
     if (!product) {
