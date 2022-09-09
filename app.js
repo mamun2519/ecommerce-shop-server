@@ -6,7 +6,9 @@ const fileUpload = require("express-fileupload");
 // middelware 
 app.use(cookieParser())
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+      origin: "https://fashion-ecommerce-92924.web.app"
+}))
 app.use(fileUpload());
 app.use(express.static("public"));
 // all router
