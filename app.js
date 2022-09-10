@@ -8,6 +8,8 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(cors({
       origin: "https://fashion-ecommerce-92924.web.app",
+      methods: ["get" , "post"],
+      credentials: true
      
       
 }))
