@@ -3,7 +3,7 @@ const app = express()
 const cors = require('cors')
 app.use(cors({
       origin: "https://fashion-ecommerce-92924.web.app",
-      // methods: ["get" , "post"],
+      methods: ["get" , "post"],
     
      
       
