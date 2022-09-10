@@ -16,7 +16,7 @@ app.use(express.json())
 
 app.use(fileUpload());
 app.use(express.static("public"));
-// all router
+// all rout
 
 
 // router hendeler 
