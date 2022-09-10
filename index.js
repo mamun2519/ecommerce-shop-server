@@ -5,7 +5,7 @@ require('dotenv').config()
 
 const port = process.env.PORT || 5000
 
-// server configration 
+// server configrations
 
 database()
 cloudinary.config({
