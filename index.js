@@ -2,6 +2,15 @@ const app = require('./app')
 const database = require('./database/database')
 const cloudinary = require('cloudinary').v2
 require('dotenv').config()
+const app = express()
+const cors = require('cors')
+app.use(cors({
+      origin: "https://fashion-ecommerce-92924.web.app",
+      methods: ["get" , "post"],
+      credentials: true
+     
+      
+}))
 const port = process.env.PORT || 5000
 
 // server configration 

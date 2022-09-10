@@ -1,11 +1,6 @@
 const express = require('express');
 const app = express()
 const cors = require('cors')
-const cookieParser = require('cookie-parser')
-const fileUpload = require("express-fileupload");
-// middelwar 
-app.use(cookieParser())
-app.use(express.json())
 app.use(cors({
       origin: "https://fashion-ecommerce-92924.web.app",
       methods: ["get" , "post"],
@@ -13,6 +8,12 @@ app.use(cors({
      
       
 }))
+const cookieParser = require('cookie-parser')
+const fileUpload = require("express-fileupload");
+// middelwar 
+app.use(cookieParser())
+app.use(express.json())
+
 app.use(fileUpload());
 app.use(express.static("public"));
 // all router
