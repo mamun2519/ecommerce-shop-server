@@ -8,7 +8,7 @@ class apiFetures {
     const keyword = this.searchQuery.keyword
       ? {
           name: {
-            // regex mongodb reguler expretion
+            // regex mongodb reguler expreti
             $regex: this.searchQuery.keyword,
             $options: "i",
           },
