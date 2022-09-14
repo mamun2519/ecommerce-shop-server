@@ -83,7 +83,7 @@ exports.getProductDetels = async (req, res, next) => {
 
 
 exports.addProductReview = async (req , res , next) =>{
-  console.log(req.body);
+
   try{
     const { rating, comment, user , profileUrl , time , name } = req.body;
 

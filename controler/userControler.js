@@ -4,7 +4,8 @@ const cloudinary = require('cloudinary')
 const userFetureApi = require("../utilits/userFetureApi");
 const AdminFetureApi = require("../utilits/adminFetureApi");
 exports.getAllUser = async (req, res, next) => {
-  const parPageDataShow = 9;
+  try{
+    const parPageDataShow = 9;
   const searchAndPagination = new userFetureApi(User.find(), req.query)
   .search()
   .filter()
@@ -15,10 +16,16 @@ exports.getAllUser = async (req, res, next) => {
     success: true,
     user,
   });
+  }
+  catch(error){
+    console.log(error);
+  }
+  
 };
 
 exports.getAllAdmin = async (req , res , next)=>{
-  const parPageDataShow = 9;
+  try{
+    const parPageDataShow = 9;
   const searchAndPagination = new  AdminFetureApi(User.find(), req.query)
   .search()
   .filter().pagination(parPageDataShow);
@@ -28,15 +35,27 @@ exports.getAllAdmin = async (req , res , next)=>{
     success: true,
     user,
   });
+  }
+  catch(error){
+    console.log(error)
+  }
+  
 
 }
 
 exports.getUserDetiles = async (req, res, next) => {
-  const user = await User.findById(req.params.id);
+  try{
+    const user = await User.findById(req.params.id);
   res.status(200).json({
     success: true,
     user,
   });
+
+  }
+  catch(error){
+    console.log(error);
+  }
+  
 };
 
 exports.createUser = async (req, res, next) => {
@@ -158,6 +177,8 @@ exports.updateUserProfile = async (req, res, next) => {
 };
 
 exports.deleteUser = async (req, res, next) => {
+  try{
+    
   const user = await User.findById(req.params.id);
   if (!user) {
     res.status(403).json({
@@ -170,10 +191,15 @@ exports.deleteUser = async (req, res, next) => {
     success: true,
     message: "User Delete SuccessFull",
   });
+  }
+  catch(error){
+    console.log(error)
+  }
 };
 
 exports.createAdmin = async (req, res, next) => {
-  const email = req.params.email;
+  try{
+    const email = req.params.email;
   const adminRequester = req.decoded.email;
   const requestAdmin = await User.findOne({ email: adminRequester });
   if (requestAdmin.role == "admin") {
@@ -204,18 +230,30 @@ exports.createAdmin = async (req, res, next) => {
   } else {
     res.status(403).send({ message: "forbiden Accescc" });
   }
+
+  }
+  catch(error){
+    console.log(error);
+  }
+  
 };
 
 exports.cheackAdmin = async (req, res, next) => {
-  const email = req.params.email;
-  const user = await User.findOne({ email });
-  if (!user) {
-    res.status(404).json({ message: "User Not Found" });
-  } else {
-    const isAdmin = user.role === "admin";
-    res.status(200).json({
-      success: true,
-      admin: isAdmin,
-    });
+  try{
+    const email = req.params.email;
+    const user = await User.findOne({ email });
+    if (!user) {
+      res.status(404).json({ message: "User Not Found" });
+    } else {
+      const isAdmin = user.role === "admin";
+      res.status(200).json({
+        success: true,
+        admin: isAdmin,
+      });
+    }
   }
+  catch(error){
+    console.log(error)
+  }
+ 
 };

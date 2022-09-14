@@ -5,7 +5,8 @@ const stripe = require("stripe")(
   "sk_test_51L1nmNCGpaTt0RU81oq26j6Ta7gwb9pGlOOwxjeXAQgefsXMvmRxFUopKE2St6GDbDpxjUug0KxRyqzL6oKarPcR00lqLjh70r"
 );
 exports.newOrder = async (req, res, next) => {
-  const d = new Date(); 
+  try{
+    const d = new Date(); 
 		const jastDate = (d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear(); 
 		
   const {
@@ -34,40 +35,58 @@ exports.newOrder = async (req, res, next) => {
     success: true,
     order,
   });
+  }
+  catch(error){
+    console.log(error);
+  }
+  
 };
 
 exports.getAllOrders = async (req, res, next) => {
-  const parPageDataShow = 9;
+  try{
+    const parPageDataShow = 9;
 
-  const order = new apiFetures(Order.find().populate("user", "name email"), req.query)
-  .search()
-  .filter()
-  .pagination(parPageDataShow);
-  const orders = await order.query;
-  res.status(200).json({
-    success: true,
-    orders,
-  });
+    const order = new apiFetures(Order.find().populate("user", "name email"), req.query)
+    .search()
+    .filter()
+    .pagination(parPageDataShow);
+    const orders = await order.query;
+    res.status(200).json({
+      success: true,
+      orders,
+    });
+  }
+  catch(error){
+    console.log(error)
+  }
+ 
 };
 
 exports.getSingleOrder = async (req, res, next) => {
-  const id = req.params.id;
-  console.log(typeof id);
-  const order = await Order.findById(id).populate("user", "name email");
-  if (!order) {
-    res.status(404).json({
-      success: false,
-      message: "Order Not found!",
+  try{
+    const id = req.params.id;
+    console.log(typeof id);
+    const order = await Order.findById(id).populate("user", "name email");
+    if (!order) {
+      res.status(404).json({
+        success: false,
+        message: "Order Not found!",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      order,
     });
   }
-  res.status(200).json({
-    success: true,
-    order,
-  });
+  catch(error){
+    console.log(error);
+  }
+ 
 };
 
 exports.orderDelete = async (req, res, next) => {
-  const order = await Order.findById(req.params.id);
+  try{
+    const order = await Order.findById(req.params.id);
   if (!order) {
     res.status(404).json({
       success: false,
@@ -80,11 +99,16 @@ exports.orderDelete = async (req, res, next) => {
     success: true,
     message: "Order Delete Successfull",
   });
+  }
+  catch(error){
+    console.log(error)
+  }
+  
 };
 
 exports.orderUpdate = async (req, res, next) => {
-
-  const order = await Order.findById(req.params.id);
+  try{
+    const order = await Order.findById(req.params.id);
   if (!order) {
     res.status(404).json({
       success: false,
@@ -113,68 +137,101 @@ exports.orderUpdate = async (req, res, next) => {
   res.status(200).json({
     success: true,
   });
+  }
+  catch(err){
+    console.log(err);
+
+  }
+
+  
 };
 
 async function updateStock(id, quantity) {
-  const product = await Product.findById(id);
+  try{
+    const product = await Product.findById(id);
 
   product.Stock -= quantity;
 
   await product.save({ validateBeforeSave: false });
+  }
+  catch(error){
+
+  }
+  
 }
 
 exports.myOrder = async (req, res, next) => {
-  const id = req.params.id;
-  const order = await Order.find({ user: id }).populate("user", "name email");
-  if (!order) {
-    res.status(404).json({
-      success: false,
-      message: "Order Not found!",
+  try{
+    const id = req.params.id;
+    const order = await Order.find({ user: id }).populate("user", "name email");
+    if (!order) {
+      res.status(404).json({
+        success: false,
+        message: "Order Not found!",
+      });
+    }
+  
+    res.status(200).json({
+      success: true,
+      order,
     });
   }
-
-  res.status(200).json({
-    success: true,
-    order,
-  });
+  catch(error){
+    console.log(error)
+  }
+ 
 };
 
 exports.discountPromoCode = async (req, res, next) => {
-  const price = parseInt(req.query.totalCost);
-  const promoCode = parseInt(req.query.code);
-  const screctCode = [4000, 5000, 6000];
-  const codeMatch = screctCode.includes(promoCode);
-  if (codeMatch) {
-    const discountPrice = parseInt((price / 100) * 20);
-    const totalPrice = price - discountPrice;
-    res.status(200).json({
-      success: true,
-      discountPrice,
-      totalPrice,
-    });
-  } else {
-    res.status(404).json({
-      success: false,
-      message: "Sorry We dont discount",
-    });
+  try{
+    const price = parseInt(req.query.totalCost);
+    const promoCode = parseInt(req.query.code);
+    const screctCode = [4000, 5000, 6000];
+    const codeMatch = screctCode.includes(promoCode);
+    if (codeMatch) {
+      const discountPrice = parseInt((price / 100) * 20);
+      const totalPrice = price - discountPrice;
+      res.status(200).json({
+        success: true,
+        discountPrice,
+        totalPrice,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "Sorry We dont discount",
+      });
+    }
+
   }
+  catch(error){
+    console.log(error);
+
+  }
+ 
 };
 
 exports.paymentGetWay = async (req, res, next) => {
-  const service = req.body;
-  const price = service.price;
-  const amount = price * 100;
-
-  // Create a PaymentIntent with the order amount and currency
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: amount,
-    currency: "usd",
-    automatic_payment_methods: {
-      enabled: true,
-    },
-  });
-
-  res.send({
-    clientSecrets: paymentIntent.client_secret,
-  });
+  try{
+    const service = req.body;
+    const price = service.price;
+    const amount = price * 100;
+  
+    // Create a PaymentIntent with the order amount and currency
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: "usd",
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+  
+    res.send({
+      clientSecrets: paymentIntent.client_secret,
+    });
+  }
+  catch(error){
+    console.log(error)
+  }
+ 
 };
