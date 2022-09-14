@@ -2,8 +2,7 @@ const express = require('express');
 const app = express()
 const cors = require('cors')
 app.use(cors({
-      origin: "http://localhost:3000",
-      // methods: ["get,"],
+      origin: "https://fashion-ecommerce-92924.web.app",
     
      
       
