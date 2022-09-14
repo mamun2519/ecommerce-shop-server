@@ -7,13 +7,14 @@ const {
   getProductDetels,
   addProductReview,
 } = require("../controler/productControler");
+const verifayToken = require("../utilits/verifayToken");
 const router = express.Router();
 
-router.post("/add", createProduct);
-router.get("/get", getProduct);
+router.post("/add", verifayToken, createProduct);
+router.get("/get", verifayToken, getProduct);
 router.get("/get/:id", getProductDetels);
 router.put("/update/:id", updateProduct);
 router.delete("/delete/:id", deleteProduct);
-router.post("/review/:id", addProductReview);
+router.post("/review/:id", verifayToken, addProductReview);
 
 module.exports = router;
