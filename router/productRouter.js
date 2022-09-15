@@ -11,10 +11,11 @@ const verifayToken = require("../utilits/verifayToken");
 const router = express.Router();
 
 router.post("/add", verifayToken, createProduct);
-router.get("/get", verifayToken, getProduct);
+router.get("/get", getProduct);
 router.get("/get/:id", getProductDetels);
 router.put("/update/:id", updateProduct);
 router.delete("/delete/:id", deleteProduct);
 router.post("/review/:id", verifayToken, addProductReview);
 
 module.exports = router;
+// ooeoe
