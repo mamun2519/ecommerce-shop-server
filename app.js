@@ -2,7 +2,7 @@ const express = require('express');
 const app = express()
 const cors = require('cors')
 app.use(cors({
-      origin: "https://fashion-ecommerce-92924.web.app/",
+      origin: "https://fashion-ecommerce-92924.web.app",
       
     
      
