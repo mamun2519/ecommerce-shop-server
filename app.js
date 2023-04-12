@@ -8,6 +8,7 @@ app.use(cors({
      
       
 }))
+// ------
 const cookieParser = require('cookie-parser')
 const fileUpload = require("express-fileupload");
 // middelwar 
