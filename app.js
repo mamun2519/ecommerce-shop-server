@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 app.use(
   cors({
-    origin: "https://smartshop-mjelwuw0n-mamun2232.vercel.app",
+    origin: "https://smartshop-tan.vercel.app",
   })
 );
 // ------
