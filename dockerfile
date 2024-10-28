@@ -1,6 +1,6 @@
 FROM node:23-alpine3.19
-WORKDIR /smart-eshop-backend
+WORKDIR /ecommarce-shop-server
 COPY . .
 RUN npm install
-EXPOSE 5000
-CMD [ "npm", "start" ]
+EXPOSE 5001
+CMD [ "npm" , "start"]
