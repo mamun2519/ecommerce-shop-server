@@ -3,7 +3,12 @@ const app = express();
 const cors = require("cors");
 app.use(
   cors({
-    origin: ["https://smartshop-tan.vercel.app", "http://localhost:3000", "*"],
+    origin: [
+      "https://smartshop-tan.vercel.app",
+      "http://localhost:3000",
+      "*",
+      "https://fashion-ecommerce-92924.web.app",
+    ],
     methods: ["Get", "Post"],
   })
 );
